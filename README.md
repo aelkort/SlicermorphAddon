@@ -8,7 +8,7 @@ Each specimen should have one file with all landmarks. For datasets with points 
 Make sure that ALL landmarks are in the same order for every specimen and that you know which landmarks designate the start and end of each curve.
 1. Export landmark files from Slicer as FCSVs. Make the file name a unique identifier for the specimen
 2. Put these files in a folder with the MergeLandmarks script and nothing else.
-3. Convert the FCSVs to CSVs using Windows Command Prompt (Search for "cmd" in the searchbar).\
+3. Convert the FCSVs to CSVs using Windows Command Prompt (Search for "cmd" in the searchbar **AND CHANGE YOUR DIRECTORY TO THE FOLDER YOU ARE WORKING IN**).\
     Use the command: `ren *.fcsv *.csv`
 4. Double click on the MergeLandmarks python script in the folder and choose the directory when prompted.
 5. Strip the first lines (you will be prompted) if you have not run this program on these files before.
@@ -21,4 +21,4 @@ This should be a table formatted as the landmarks.csv is (1 row / specimen) name
 1. Create a blank FSCV template using your current version of Slicer named "FCSVTemplate.fcsv".
 2. Place "landmarks.csv","FCSVTemplate.fcsv", and "UnMergeLandmarks.py" in a folder together.
 3. Double click the UnMergeLandmarks script and give the correct directory.
-4. Convert the output CSVs to FCSVS using the command: `ren *.csv *.fcsv`. **Note:** you will want to remove landmarks.csv first
+4. (Search for "cmd" in the searchbar **AND CHANGE YOUR DIRECTORY TO THE FOLDER YOU ARE WORKING IN**). Convert the output CSVs to FCSVS using the command: `ren *.csv *.fcsv`. **Note:** you will want to remove landmarks.csv first

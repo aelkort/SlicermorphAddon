@@ -1,5 +1,5 @@
-#---Merge landmarks into a single CSV file formated for Mathematica---
-# Anne Kort -- aekort@iu.edu
+#---Merge landmarks into a single CSV file formated for Mathematica or R---
+# Anne Kort
 
 # Prepartion for this program
 # Export Slicer landmarks into a folder with nothing else
@@ -19,27 +19,17 @@ simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 # Strip the first two lines of the .fcsv format
 def fcsvStrip(fcsv):
     """Strips the first line, the column IDs
-#of an csv exported from 3D Slicer"""
+of an csv exported from 3D Slicer"""
     f = open(fcsv, "r")
     lines = f.readlines()
     f.close()
     lines.remove(lines[0])
+    lines.remove(lines[0])
+    lines.remove(lines[0])
+    lines.insert(0,"colID,x,y,z,ow,ox,oy,oz,vis,sel,lock,label,,,desc,associatedNodeID\n")
     f = open(fcsv, "w")
     f.writelines(lines)
     f.close()
-
-def dropColumns(data):
-    """Deletes the unneeded columns from a csv dataset"""
-    dropcol=["ow","ox","oy","oz","vis","sel","lock","label","desc","associatedNodeID"]
-    for col in dropcol:
-        data.drop(col, inplace=True, axis=1)
-
-def getAnimal(data):
-    """Gets the animal name from the label in the dataframe"""
-    label = data.loc[2,'label']
-    labelList = label.split("-")
-    animalLabel = labelList[0]+"_"+labelList[1]
-    return animalLabel
 
 def getCoord(data, axis=str, landmark=int):
     """Returns the coordinate of a particular axis (x,y,z) and landmark
@@ -49,11 +39,10 @@ from a specified dataframe"""
     
 
 
-
 #--------Prepare Data Frames------------------
 
 # Set landmark directory
-direct = "C:\\Users\\aelko\Desktop\\landmarks\\ToR"
+direct = "C:\\Users\\aelko\Desktop\\ExampleSemiLandmarks\\ToR"
 print("Current directory: ")
 print(direct)
 newDiryn = input("Change directory? ")
@@ -63,42 +52,34 @@ os.chdir(direct)
 
 # Pull list of file names from directory
 fcsvFiles = os.listdir(direct)
-fcsvFiles.remove('MergeLandmarks2.0.py')
+fcsvFiles.remove('MergeLandmarks.py')
 if "landmarks.csv" in fcsvFiles:
     fcsvFiles.remove('landmarks.csv')
-for fcsv in fcsvFiles:
-    if "schema" in fcsv:
-        fcsvFiles.remove(fcsv)
 
 #Strip the first 2 lines of each file
 stripyn = input("Strip the first two lines? Enter Y or N:  ")
-#if "y" in stripyn.lower():
-    #for fcsv in fcsvFiles:
-        #fcsvStrip(fcsv)
+if "y" in stripyn.lower():
+    for fcsv in fcsvFiles:
+        fcsvStrip(fcsv)
 
 # Import the fcsv files as a set of pandas dataframes
 dataframes = []
-animals = []
+specimens = []
 for fcsv in fcsvFiles:
-    dataframes.append(pd.read_csv(fcsv))
-    animals.append(fcsv[:-4])
-
-# Delete unneeded columns, saving only the coordinates and label
-for dataframe in dataframes:
-    dropColumns(dataframe)
+    dataframes.append(pd.read_csv(fcsv,usecols=[0,1,2,3]))
+    specimens.append(fcsv[:-4])
 
 # Create an empty main dataframe
 mainData = pd.DataFrame()
 
-
 # Append new labels to the new dataframe
-mainData['animal']=animals
+mainData['specimen']=specimens
 
 
 # -------------Arrange landmarks in proper order----------------------
 
 # Get number of landmarks
-landNum = 158#len(dataframes[0])
+landNum = int(input("Number of Landmarks:  "))
 
 # Create new columns for coordinate rearrangement
 colums = []
@@ -124,4 +105,6 @@ for dataframe in dataframes:
 #--------------Export--------------
 
 mainData.to_csv('landmarks.csv',header=False,index=False)
+
+
 

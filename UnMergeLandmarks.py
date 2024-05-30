@@ -1,6 +1,5 @@
 #---Merge landmarks into a single CSV file formated for Mathematica---
-# Anne Kort -- aekort@iu.edu
-
+# Anne Kort -- annekort@umich.edu
 # Prepartion for this program
 # A csv with one "label" column and then the landmarks columns as x1, y1, z1, etc.
 # Label the landmarks file "landmarks.csv"
@@ -38,14 +37,14 @@ def makeFCSV(temp,animal):
 def getCoord(landmarkList, axis=str, landmark=int):
     """Gets the coordinate of a particular axis (x,y,z) and landmark
 from a specified list of landmarks and adds to the template"""
-    coord = landmarkList.loc[str(landmark)+axis]
+    coord = landmarkList.loc[axis+str(landmark)]
     return coord
 
 
 #--------Prepare Data Frames------------------
 
 # Set landmark directory
-direct = "C:\\Users\\aelko\\Desktop\\landmarks\\BacktoSlicer"
+direct = 'C:\\Users\\aelko\\Desktop\\ExampleSemiLandmarks\\Unmerge'
 print("Current directory: ")
 print(direct)
 newDiryn = input("Change directory? ")
